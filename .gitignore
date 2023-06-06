@@ -163,3 +163,4 @@ cython_debug/
 *.code-workspace
 Michael_Kupferstein/Michael_Kupferstein.code-workspace
 
+.vscode
