@@ -1,7 +1,0 @@
-{
-    "python.testing.pytestArgs": [
-        "Michael_Kupferstein"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
-}
