@@ -29,7 +29,11 @@ choice = int(input('Enter 0 to enter your own matrix or 1 to randomly generate o
 
 if choice == 1:
     size = int(input('Enter the desired graph size: '))
-    matrix = generate_random_graph(size)
+    if size > 30:
+        prob = float(input('Enter the probability (from 0.0 - 1.0) that node is connected: '))
+        matrix = generate_random_graph(size, p=prob)
+    else:
+        matrix = generate_random_graph(size)
 elif choice == 0:
     input_str = input('Enter your adjacency matrix: ')
     adj_matrix_str = input_str.replace(' ', '')
@@ -80,7 +84,7 @@ def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None, ax=N
 graph = nx.from_numpy_array(matrix)
 
 # Create a Figure and a single subplot grid with two columns
-fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
 # Draw the graph on the first subplot
 pos = nx.spring_layout(graph)
