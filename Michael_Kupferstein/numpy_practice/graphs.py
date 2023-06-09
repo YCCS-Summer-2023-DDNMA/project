@@ -41,7 +41,7 @@ else:
     print(choice,'is not a vaid choice.')
     exit()
 
-def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None):
+def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None, ax=None):
     """
     Draw the adjacency matrix of a networkx graph.
     - G is a networkx graph.
@@ -51,19 +51,20 @@ def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None):
       in exactly one node list.
     - colors is a list of strings indicating what color each
       partition should be.
+    - ax (optional) is the Axes object to draw the matrix on.
     If partitions is specified, the same number of colors needs to be
     specified.
     """
     adjacency_matrix = nx.to_numpy_array(G, dtype=bool, nodelist=node_order)
 
     # Plot adjacency matrix in toned-down black and white
-    fig = plt.figure(figsize=(5, 5))  # in inches
-    plt.imshow(adjacency_matrix, cmap="Greys", interpolation="none")
+    if ax is None:
+        ax = plt.gca()
+    ax.imshow(adjacency_matrix, cmap="Greys", interpolation="none")
 
     # The rest is just if you have sorted nodes by a partition and want to
     # highlight the module boundaries
     assert len(partitions) == len(colors)
-    ax = plt.gca()
     for partition, color in zip(partitions, colors):
         current_idx = 0
         for module in partition:
@@ -78,17 +79,20 @@ def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None):
 # Create a graph from the adjacency matrix
 graph = nx.from_numpy_array(matrix)
 
-# Create a Figure and subplots
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+# Create a Figure and a single subplot grid with two columns
+fig, axes = plt.subplots(1, 2, figsize=(10, 5))
 
 # Draw the graph on the first subplot
 pos = nx.spring_layout(graph)
-nx.draw_networkx(graph, pos, ax=ax1, with_labels=True)
-ax1.set_title('Graph')
+nx.draw_networkx(graph, pos, ax=axes[0], with_labels=True)
+axes[0].set_title('Graph')
 
 # Call the custom function to draw the adjacency matrix on the second subplot
-draw_adjacency_matrix(graph, node_order=graph.nodes(), partitions=[], colors=[])
+draw_adjacency_matrix(graph, node_order=graph.nodes(), partitions=[], colors=[], ax=axes[1])
+
+
+# Adjust spacing between subplots
+plt.subplots_adjust(wspace=0.3)
 
 # Display the plot
-plt.tight_layout()
 plt.show()
