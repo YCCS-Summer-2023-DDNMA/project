@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import patches
+
 import networkx as nx
 
 
@@ -39,8 +41,39 @@ else:
     print(choice,'is not a vaid choice.')
     exit()
 
-    
+def draw_adjacency_matrix(G, node_order=None, partitions=None, colors=None):
+    """
+    Draw the adjacency matrix of a networkx graph.
+    - G is a networkx graph.
+    - node_order (optional) is a list of nodes, where each node in G
+      appears exactly once.
+    - partitions is a list of node lists, where each node in G appears
+      in exactly one node list.
+    - colors is a list of strings indicating what color each
+      partition should be.
+    If partitions is specified, the same number of colors needs to be
+    specified.
+    """
+    adjacency_matrix = nx.to_numpy_array(G, dtype=bool, nodelist=node_order)
 
+    # Plot adjacency matrix in toned-down black and white
+    fig = plt.figure(figsize=(5, 5))  # in inches
+    plt.imshow(adjacency_matrix, cmap="Greys", interpolation="none")
+
+    # The rest is just if you have sorted nodes by a partition and want to
+    # highlight the module boundaries
+    assert len(partitions) == len(colors)
+    ax = plt.gca()
+    for partition, color in zip(partitions, colors):
+        current_idx = 0
+        for module in partition:
+            ax.add_patch(patches.Rectangle((current_idx, current_idx),
+                                           len(module),  # Width
+                                           len(module),  # Height
+                                           facecolor="none",
+                                           edgecolor=color,
+                                           linewidth="1"))
+            current_idx += len(module)
 
 # Create a graph from the adjacency matrix
 graph = nx.from_numpy_array(matrix)
@@ -53,38 +86,9 @@ pos = nx.spring_layout(graph)
 nx.draw_networkx(graph, pos, ax=ax1, with_labels=True)
 ax1.set_title('Graph')
 
-# Display the adjacency matrix as a binary grid on the second subplot
-ax2.axis('off')  # Remove axis ticks and labels
-
-# Create a binary grid based on the adjacency matrix
-binary_grid = np.zeros_like(matrix)
-binary_grid[matrix == 1] = 1
-
-# Plot the binary grid
-ax2.imshow(binary_grid, cmap='binary')
-
-# Set the ticks and labels for x-axis and y-axis
-ax2.set_xticks(np.arange(matrix.shape[1]))
-ax2.set_yticks(np.arange(matrix.shape[0]))
-ax2.set_xticklabels(np.arange(matrix.shape[1]), fontsize=8)
-ax2.set_yticklabels(np.arange(matrix.shape[0]), fontsize=8)
-
-# Add text annotations with the values of the binary grid
-for i in range(matrix.shape[0]):
-    for j in range(matrix.shape[1]):
-        if matrix[i,j] == 0:
-            ax2.text(j, i, str(matrix[i, j]), ha='center', va='center', color='black')
-        else:
-            ax2.text(j, i, str(matrix[i, j]), ha='center', va='center', color='white')
-
-
-ax2.set_title('Adjacency Matrix')
+# Call the custom function to draw the adjacency matrix on the second subplot
+draw_adjacency_matrix(graph, node_order=graph.nodes(), partitions=[], colors=[])
 
 # Display the plot
 plt.tight_layout()
 plt.show()
-
-
-
-
-
