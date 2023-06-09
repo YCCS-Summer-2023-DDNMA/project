@@ -22,14 +22,6 @@ def generateRandomEdges(n,p):
                 edges.append((i,j))
     return edges
 
-def calculate_font_size():
-    max_font_size = 35
-    min_font_size = 15
-    # Set the scaling factor based on the maximum font size and the number of rows
-    scaling_factor = (max_font_size - min_font_size) / np.log10(size + 1)
-    # Calculate the font size using the logarithmic scaling factor
-    font_size = int(max_font_size - scaling_factor * np.log10(size + 1))
-    return font_size
 
 choice = int(input('Enter 0 to enter your own matrix or 1 to randomly generate one: '))
 
@@ -47,6 +39,7 @@ else:
     print(choice,'is not a vaid choice.')
     exit()
 
+    
 
 # Create a graph from the adjacency matrix
 graph = nx.from_numpy_array(matrix)
@@ -59,14 +52,15 @@ pos = nx.spring_layout(graph)
 nx.draw_networkx(graph, pos, ax=ax1, with_labels=True)
 ax1.set_title('Graph')
 
-# Display the adjacency matrix as text on the second subplot
+# Display the adjacency matrix as a binary grid on the second subplot
 ax2.axis('off')  # Remove axis ticks and labels
 
-font_size = calculate_font_size()
+# Create a binary grid based on the adjacency matrix
+binary_grid = np.zeros_like(matrix)
+binary_grid[matrix == 1] = 1
 
-ax2.text(0.5, 0.5, str(matrix), ha='center', va='center', fontsize=font_size)
-
-# Customize the plot
+# Plot the binary grid
+ax2.imshow(binary_grid, cmap='binary')
 ax2.set_title('Adjacency Matrix')
 
 # Display the plot
