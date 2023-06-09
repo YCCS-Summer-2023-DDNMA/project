@@ -41,6 +41,7 @@ else:
 
     
 
+
 # Create a graph from the adjacency matrix
 graph = nx.from_numpy_array(matrix)
 
@@ -61,8 +62,29 @@ binary_grid[matrix == 1] = 1
 
 # Plot the binary grid
 ax2.imshow(binary_grid, cmap='binary')
+
+# Set the ticks and labels for x-axis and y-axis
+ax2.set_xticks(np.arange(matrix.shape[1]))
+ax2.set_yticks(np.arange(matrix.shape[0]))
+ax2.set_xticklabels(np.arange(matrix.shape[1]), fontsize=8)
+ax2.set_yticklabels(np.arange(matrix.shape[0]), fontsize=8)
+
+# Add text annotations with the values of the binary grid
+for i in range(matrix.shape[0]):
+    for j in range(matrix.shape[1]):
+        if matrix[i,j] == 0:
+            ax2.text(j, i, str(matrix[i, j]), ha='center', va='center', color='black')
+        else:
+            ax2.text(j, i, str(matrix[i, j]), ha='center', va='center', color='white')
+
+
 ax2.set_title('Adjacency Matrix')
 
 # Display the plot
 plt.tight_layout()
 plt.show()
+
+
+
+
+
