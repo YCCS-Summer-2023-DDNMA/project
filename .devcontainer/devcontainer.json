@@ -1,0 +1,8 @@
+{
+  "name": "JAX Development",
+  "extensions": [],
+  "postCreateCommand": "pip install --upgrade jax jaxlib",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  }
+}
