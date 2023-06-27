@@ -9,9 +9,7 @@ jobs:
     steps:
       - name: Check if card is moved to 'Done' column
         id: checkDone
-        run: |
-          echo "Column name: ${{ github.event.project_card.column_name }}"
-          echo "::set-output name=close_issue::${{ github.event.project_card.column_name == 'Done' }}"
+        run: echo "::set-output name=close_issue::${{ github.event.project_card.column_name == 'Done' }}"
 
       - name: Close Issue
         if: steps.checkDone.outputs.close_issue == 'true'
@@ -21,7 +19,6 @@ jobs:
           script: |
             const { context, github } = require('@actions/github');
             const issueNumber = context.payload.project_card.content_url.split('/').pop();
-            console.log(`Closing issue #${issueNumber}`);
             github.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
