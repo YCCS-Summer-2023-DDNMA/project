@@ -1,13 +1,11 @@
 name: Close Issue on Project Completion
 on:
   project_card:
-    types:
-      - moved
+    types: [moved]
 
 jobs:
   closeIssue:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check if card is moved to 'Done' column
         id: checkDone
@@ -21,10 +19,9 @@ jobs:
           script: |
             const { context, github } = require('@actions/github');
             const issueNumber = context.payload.project_card.content_url.split('/').pop();
-
             github.issues.update({
-              owner: MichaelKupferstein,
-              repo: project,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               issue_number: issueNumber,
               state: 'closed'
             });
