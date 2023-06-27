@@ -1,0 +1,30 @@
+name: Close Issue on Project Completion
+on:
+  project_card:
+    types:
+      - moved
+
+jobs:
+  closeIssue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if card is moved to 'Done' column
+        id: checkDone
+        run: echo "::set-output name=close_issue::${{ github.event.project_card.column_name == 'Done' }}"
+
+      - name: Close Issue
+        if: steps.checkDone.outputs.close_issue == 'true'
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { context, github } = require('@actions/github');
+            const issueNumber = context.payload.project_card.content_url.split('/').pop();
+
+            github.issues.update({
+              owner: MichaelKupferstein,
+              repo: project,
+              issue_number: issueNumber,
+              state: 'closed'
+            });
