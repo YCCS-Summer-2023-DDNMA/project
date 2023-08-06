@@ -30,7 +30,7 @@ See the [presentation](resources/Team_Presentation.pdf) for more details on the 
 
 This project was developed by:
 
-- [Avi Linzer](https://www.linkedin.com/in/abraham-linzer-318876231/)
+- [Abraham (Avi) Linzer](https://www.linkedin.com/in/abraham-linzer-318876231/)
 - [Joseph Couzens](https://www.linkedin.com/in/josephcouzens/)
 - [Michael Batushansky](https://www.linkedin.com/in/michael-batushansky-aa5986205)
 - [Michael Kupferstein](https://www.linkedin.com/in/michael-kupferstein-50967124a/)
